@@ -5,14 +5,14 @@ import { products, categories } from './products.js';
 import './styles.css';
 
 // Set to true to show the retail rate on each product card. Wholesale rates are never shown on the site.
-const SHOW_RETAIL_PRICE = false;
+const SHOW_RETAIL_PRICE = true;
 // How many products to show before the "Show more" button.
 const PAGE_SIZE = 12;
 
 // Business contact details (from the Shiv Manufacturing visiting card). Update the email before publishing.
 const COMPANY = {
   owners: [
-    { name: 'Samadhan Mahajan', role: 'Proprietor', phone: '+91 98601 54751', phoneLink: '+919860154751', whatsapp: '919975684751' },
+    { name: 'Samadhan Mahajan', role: 'Proprietor', phone: '+91 98601 54751', phoneLink: '+919860154751', whatsapp: '919860154751' },
     { name: 'Mahesh Mahajan', role: 'Proprietor', phone: '+91 90221 56321', phoneLink: '+919022156321', whatsapp: '919022156321' }
   ],
   phone: '+91 98601 54751',
@@ -22,7 +22,7 @@ const COMPANY = {
   addressMr: 'स्पार्तव प्लाझा च्या मागे, यावल - चोपडा रोड, सार्वजनिक विद्यालय, अडावद ता. चोपडा जि. जळगाव',
   mapLink: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Shiv Manufacturing Company, Adavad, Chopda, Jalgaon'),
   gst: '27HKRPM0666J1ZF',
-  hours: 'Monday – Saturday, 9:00 AM – 9:00 PM'
+  hours: 'Monday – Saturday, 9:00 AM – 6:00 PM'
 };
 
 // Icon shown on a product card when it has no photo / illustration yet.
