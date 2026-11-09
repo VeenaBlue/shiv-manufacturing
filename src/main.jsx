@@ -44,7 +44,7 @@ const COMPANY = {
       role: "Proprietor",
       phone: "+91 98601 54751",
       phoneLink: "+919860154751",
-      whatsapp: "919860154751",
+      whatsapp: "919975684751",
     },
     {
       name: "Mahesh Mahajan",
