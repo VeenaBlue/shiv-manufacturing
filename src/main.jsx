@@ -65,7 +65,7 @@ const COMPANY = {
     "https://www.google.com/maps/search/?api=1&query=" +
     encodeURIComponent("Shiv Manufacturing Company, Adavad, Chopda, Jalgaon"),
   gst: "27HKRPM0666J1ZF",
-  hours: "Monday – Saturday, 9:00 AM – 6:00 PM",
+  hours: "Monday – Saturday, 9:00 AM – 9:00 PM",
 };
 
 // Icon shown on a product card when it has no photo / illustration yet.
