@@ -68,10 +68,16 @@ const COMPANY = {
   hours: "Monday – Saturday, 9:00 AM – 9:00 PM",
 };
 
+// Normalize text to make product search flexible
+const normalizeSearchText = (value = "") => {
+  return String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+};
 // Icon shown on a product card when it has no photo / illustration yet.
 const CATEGORY_ICONS = {
   Motors: Cog,
-  "Fan Blades": Fan,
+  "Fan Bladess": Fan,
   Pumps: Droplets,
   "Cooler Bodies": Package,
   "Cooler Tanks": Container,
@@ -118,19 +124,31 @@ function App() {
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return products.filter(
-      (p) =>
-        (activeCategory === "All Products" || p.category === activeCategory) &&
-        (!q ||
-          `${p.name} ${p.code} ${p.category} ${p.description} ${p.specs.join(
-            " "
-          )}`
-            .toLowerCase()
-            .includes(q))
+const filtered = useMemo(() => {
+  const q = normalizeSearchText(search);
+
+  return products.filter((p) => {
+    const matchesCategory =
+      activeCategory === "All Products" ||
+      p.category === activeCategory;
+
+    // Combine all searchable product information
+    const searchableText = normalizeSearchText(
+      [
+        p.name,
+        p.code,
+        p.category,
+        p.description,
+        ...(p.specs || []),
+      ].join(" ")
     );
-  }, [activeCategory, search]);
+
+    const matchesSearch =
+      !q || searchableText.includes(q);
+
+    return matchesCategory && matchesSearch;
+  });
+}, [activeCategory, search]);
   const shown = filtered.slice(0, visible);
 
   const groupedProducts = useMemo(
