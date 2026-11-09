@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -32,7 +32,7 @@ import { products, categories } from "./products.js";
 import "./styles.css";
 
 // Set to true to show the retail rate on each product card. Wholesale rates are never shown on the site.
-const SHOW_RETAIL_PRICE = true;
+const SHOW_RETAIL_PRICE = false;
 // How many products to show before the "Show more" button.
 const PAGE_SIZE = 12;
 
@@ -123,32 +123,26 @@ function App() {
   const [sent, setSent] = useState(false);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
-const filtered = useMemo(() => {
-  const q = normalizeSearchText(search);
+  const [error, setError] = useState("");
+  const filtered = useMemo(() => {
+    const q = normalizeSearchText(search);
 
-  return products.filter((p) => {
-    const matchesCategory =
-      activeCategory === "All Products" ||
-      p.category === activeCategory;
+    return products.filter((p) => {
+      const matchesCategory =
+        activeCategory === "All Products" || p.category === activeCategory;
 
-    // Combine all searchable product information
-    const searchableText = normalizeSearchText(
-      [
-        p.name,
-        p.code,
-        p.category,
-        p.description,
-        ...(p.specs || []),
-      ].join(" ")
-    );
+      // Combine all searchable product information
+      const searchableText = normalizeSearchText(
+        [p.name, p.code, p.category, p.description, ...(p.specs || [])].join(
+          " "
+        )
+      );
 
-    const matchesSearch =
-      !q || searchableText.includes(q);
+      const matchesSearch = !q || searchableText.includes(q);
 
-    return matchesCategory && matchesSearch;
-  });
-}, [activeCategory, search]);
+      return matchesCategory && matchesSearch;
+    });
+  }, [activeCategory, search]);
   const shown = filtered.slice(0, visible);
 
   const groupedProducts = useMemo(
@@ -171,21 +165,20 @@ const filtered = useMemo(() => {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
 
-  const form = e.currentTarget;
-  const data = new FormData(form);
+    const name = data.get("name");
+    const phone = data.get("phone");
+    const email = data.get("email") || "Not provided";
+    const product = data.get("product") || "General enquiry";
+    const message = data.get("message");
 
-  const name = data.get('name');
-  const phone = data.get('phone');
-  const email = data.get('email') || 'Not provided';
-  const product = data.get('product') || 'General enquiry';
-  const message = data.get('message');
-
-  // Prepare enquiry details
-  const enquiryMessage = `
+    // Prepare enquiry details
+    const enquiryMessage = `
 New Enquiry - Shiv Manufacturing
 
 Name: ${name}
@@ -197,50 +190,66 @@ Message:
 ${message}
   `.trim();
 
-  // Open WhatsApp with pre-filled enquiry
-  const whatsappNumber = COMPANY.owners[0].whatsapp;
+    // Open WhatsApp with pre-filled enquiry
+    const whatsappNumber = COMPANY.owners[0].whatsapp;
 
-  const whatsappURL =
-    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(enquiryMessage)}`;
+    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      enquiryMessage
+    )}`;
 
-  // Open before awaiting email to avoid popup blockers
-  window.open(whatsappURL, '_blank', 'noopener,noreferrer');
+    // Open before awaiting email to avoid popup blockers
+    window.open(whatsappURL, "_blank", "noopener,noreferrer");
 
-  setSubmitting(true);
-  setError('');
-  setSent(false);
+    setSubmitting(true);
+    setError("");
+    setSent(false);
 
-  try {
-    // Send email automatically
-    await emailjs.send(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-      {
-        from_name: name,
-        phone: phone,
-        from_email: email,
-        product: product,
-        message: message,
-      },
-      {
-        publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      }
-    );
+    try {
+      // Send email automatically
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: name,
+          phone: phone,
+          from_email: email,
+          product: product,
+          message: message,
+        },
+        {
+          publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+        }
+      );
 
-    setSent(true);
-    form.reset();
-    setSelected('');
+      setSent(true);
+      form.reset();
+      setSelected("");
+    } catch (err) {
+      console.error("Email sending failed:", err);
+      setError("Email could not be sent. Please contact us directly.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-  } catch (err) {
-    console.error('Email sending failed:', err);
-    setError(
-      'Email could not be sent. Please contact us directly.'
-    );
-  } finally {
-    setSubmitting(false);
+  const scrollToEnquiryForm = () => {
+  const contactSection = document.getElementById("contact");
+  const enquiryForm = document.querySelector(".contact-form");
+
+  if (window.innerWidth <= 768) {
+    // Mobile: scroll directly to the enquiry form
+    enquiryForm?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  } else {
+    // Desktop: scroll to the contact section
+    contactSection?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
 };
-
 
   return (
     <>
@@ -259,7 +268,7 @@ ${message}
               Home
             </a>
             <a href="#products" onClick={closeMenu}>
-              Products <ChevronDown size={14} />
+              Products
             </a>
             <a href="#about" onClick={closeMenu}>
               About Us
@@ -404,17 +413,19 @@ ${message}
                       {p.retail ? fmtPrice(p.retail) : "Price on request"}
                     </div>
                   )}
-                  <button
-                    className="text-link"
-                    onClick={() => {
-                      setSelected(`${p.name} (${p.code})`);
-                      document
-                        .getElementById("contact")
-                        .scrollIntoView({ behavior: "smooth" });
-                    }}
-                  >
-                    Enquire about this <ArrowUpRight size={16} />
-                  </button>
+                 <button
+  className="text-link"
+  onClick={() => {
+    setSelected(`${p.name} (${p.code})`);
+
+    // Scroll to enquiry form
+    setTimeout(() => {
+      scrollToEnquiryForm();
+    }, 100);
+  }}
+>
+  Enquire about this <ArrowUpRight size={16} />
+</button>
                 </div>
               </article>
             ))}
@@ -635,7 +646,17 @@ ${message}
                     name="phone"
                     required
                     type="tel"
-                    placeholder="Enter phone number"
+                    inputMode="numeric"
+                    maxLength={10}
+                    minLength={10}
+                    pattern="[6-9][0-9]{9}"
+                    title="Enter a valid 10-digit Indian mobile number starting with 6, 7, 8 or 9."
+                    placeholder="Enter 10-digit mobile number"
+                    onChange={(e) => {
+                      e.target.value = e.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 10);
+                    }}
                   />
                 </label>
                 <label>
@@ -676,27 +697,27 @@ ${message}
                   />
                 </label>
               </div>
-             <button
-  className="btn btn-orange submit-btn"
-  type="submit"
-  disabled={submitting}
->
-  {submitting ? 'Sending...' : 'Send Enquiry'}
-  <ArrowRight size={17}/>
-</button>
+              <button
+                className="btn btn-orange submit-btn"
+                type="submit"
+                disabled={submitting}
+              >
+                {submitting ? "Sending..." : "Send Enquiry"}
+                <ArrowRight size={17} />
+              </button>
 
-{sent && (
-  <p className="form-hint">
-    Your enquiry email has been sent successfully!
-    Please send the pre-filled WhatsApp message as well.
-  </p>
-)}
+              {sent && (
+                <p className="form-hint">
+                  Your enquiry email has been sent successfully! Please send the
+                  pre-filled WhatsApp message as well.
+                </p>
+              )}
 
-{error && (
-  <p className="form-hint" style={{ color: 'red' }}>
-    {error}
-  </p>
-)}
+              {error && (
+                <p className="form-hint" style={{ color: "red" }}>
+                  {error}
+                </p>
+              )}
               {sent && (
                 <p className="form-hint">
                   Your email app should open with your enquiry. If it doesn't,
