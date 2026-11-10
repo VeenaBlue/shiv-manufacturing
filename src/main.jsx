@@ -29,6 +29,8 @@ import {
   Zap,
 } from "lucide-react";
 import { products, categories } from "./products.js";
+import { wholesaleProducts } from "./wholesaleProducts.js";
+import "./wholesale.css";
 import "./styles.css";
 
 // Set to true to show the retail rate on each product card. Wholesale rates are never shown on the site.
@@ -251,7 +253,7 @@ ${message}
   }
 };
 
-  return (
+ return (
     <>
       <header className="header">
         <div className="nav-wrap">
@@ -270,6 +272,9 @@ ${message}
             <a href="#products" onClick={closeMenu}>
               Products
             </a>
+            <a href="#wholesale" onClick={closeMenu}>
+              Wholesale
+            </a>
             <a href="#about" onClick={closeMenu}>
               About Us
             </a>
@@ -285,54 +290,60 @@ ${message}
           </a>
         </div>
       </header>
+
       <main>
+        {/* ================= HERO ================= */}
         <section className="hero" id="home">
           <div className="hero-shape shape-one" />
           <div className="hero-inner">
             <div className="hero-copy">
               <div className="eyebrow">
-                <span /> QUALITY • PRECISION • PERFORMANCE
+                <span /> MANUFACTURER • SUPPLIER • WHOLESALER
               </div>
               <h1>
-                Built for Better
+                We make it.
                 <br />
-                <em>Cooling Solutions.</em>
+                <em>We supply it.</em>
               </h1>
               <p className="hero-sub">
-                Your trusted partner for high-quality cooling components and
-                dependable industrial products.
+                Shiv Manufacturing Company manufactures cooling components and
+                also supplies a wide range of fans and home appliances to
+                households, dealers and bulk buyers.
               </p>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#products">
                   Explore Products <ArrowRight size={17} />
                 </a>
-                <a className="btn btn-outline" href="#contact">
-                  Get a Quote
+                <a className="btn btn-outline" href="#wholesale">
+                  Dealer &amp; Bulk Rates
                 </a>
               </div>
               <div className="hero-proof">
                 <span>
-                  <CheckCircle2 /> Quality-focused manufacturing
+                  <CheckCircle2 /> Own manufacturing
                 </span>
                 <span>
-                  <CheckCircle2 /> Reliable product range
+                  <CheckCircle2 /> Wide supply range
+                </span>
+                <span>
+                  <CheckCircle2 /> Dealer-friendly pricing
                 </span>
               </div>
+
             </div>
-            <div className="hero-visual">
+
+            {/* <div className="hero-visual">
               <div className="visual-glow" />
-              <div className="hero-product hero-fan">
-                <img
-                  src="/products/exhaust-fan.svg"
-                  alt="Industrial exhaust fan blade"
-                />
-              </div>
-              <div className="hero-product hero-motor">
-                <img src="/products/cooler-motor.svg" alt="Cooler motor" />
-              </div>
-              <div className="hero-product hero-cooler">
-                <img src="/products/cooler-body.svg" alt="Air cooler body" />
-              </div>
+              {wholesaleProducts.slice(0, 3).map((p, i) => (
+                <div
+                  key={p.id}
+                  className={`hero-product hero-photo ${
+                    ["hero-fan", "hero-motor", "hero-cooler"][i]
+                  }`}
+                >
+                  <img src={p.image} alt={p.name} />
+                </div>
+              ))}
               <div className="floating-note">
                 <span className="note-icon">
                   <ShieldCheck />
@@ -342,18 +353,21 @@ ${message}
                   <small>Quality in every detail</small>
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="hero-bottom-line" />
         </section>
+
+        {/* ================= PRODUCTS ================= */}
         <section className="products-section section" id="products">
           <div className="section-heading">
             <div className="eyebrow centered">OUR PRODUCT RANGE</div>
             <h2>
-              Products made to <em>perform.</em>
+              Made by us. <em>Supplied by us.</em>
             </h2>
             <p>
-              Explore our range of cooling products and industrial components.
+              Explore the components we manufacture and the appliances we
+              supply.
             </p>
           </div>
           <div className="catalog-tools">
@@ -413,19 +427,17 @@ ${message}
                       {p.retail ? fmtPrice(p.retail) : "Price on request"}
                     </div>
                   )}
-                 <button
-  className="text-link"
-  onClick={() => {
-    setSelected(`${p.name} (${p.code})`);
-
-    // Scroll to enquiry form
-    setTimeout(() => {
-      scrollToEnquiryForm();
-    }, 100);
-  }}
->
-  Enquire about this <ArrowUpRight size={16} />
-</button>
+                  <button
+                    className="text-link"
+                    onClick={() => {
+                      setSelected(`${p.name} (${p.code})`);
+                      setTimeout(() => {
+                        scrollToEnquiryForm();
+                      }, 100);
+                    }}
+                  >
+                    Enquire about this <ArrowUpRight size={16} />
+                  </button>
                 </div>
               </article>
             ))}
@@ -456,6 +468,93 @@ ${message}
             </a>
           </div>
         </section>
+
+        {/* ================= WHOLESALE ================= */}
+        <section className="wholesale-section section" id="wholesale">
+          <div className="wholesale-banner">
+            <div className="wholesale-kicker">
+              DEALER • DISTRIBUTOR • BULK BUYER
+            </div>
+            <h2>
+              More products. <em>Better wholesale value.</em>
+            </h2>
+            <p>
+              Stock your store with trusted fans and home appliances from Shiv
+              Manufacturing Company. Attractive bulk quotations, dependable
+              support and a growing product range.
+            </p>
+            <a className="btn btn-primary" href="#contact">
+              Get Wholesale Rates <ArrowRight size={17} />
+            </a>
+            <span className="wholesale-promise">
+              WHOLESALE ENQUIRIES WELCOME · ADAVAD, JALGAON
+            </span>
+          </div>
+
+          <div className="section-heading wholesale-heading">
+            <div className="eyebrow centered">NEW WHOLESALE COLLECTION</div>
+            <h2>
+              Everyday appliances, <em>business-ready prices.</em>
+            </h2>
+            <p>
+              Explore the latest additions. Contact us for current stock,
+              dealer rates and bulk-order quotations.
+            </p>
+          </div>
+
+          <div className="wholesale-grid">
+            {wholesaleProducts.map((p) => (
+              <article className="wholesale-card" key={p.id}>
+                <div className="wholesale-image-wrap">
+                  <img src={p.image} alt={p.name} loading="lazy" />
+                  <span className="wholesale-tag">WHOLESALE</span>
+                </div>
+                <div className="wholesale-card-content">
+                  <span className="wholesale-category">{p.category}</span>
+                  <h3>{p.name}</h3>
+                  <p>{p.description}</p>
+                  <div className="wholesale-models">
+                    {p.models.map((model) => (
+                      <span key={model}>{model}</span>
+                    ))}
+                  </div>
+                  {p.offerNote && (
+                    <small className="wholesale-offer-note">
+                      {p.offerNote}
+                    </small>
+                  )}
+                  <div className="wholesale-card-bottom">
+                    <strong>Wholesale price on enquiry</strong>
+                    <button
+                      className="text-link"
+                      onClick={() => {
+                        setSelected(`${p.name} (Wholesale enquiry)`);
+                        setTimeout(scrollToEnquiryForm, 100);
+                      }}
+                    >
+                      Get a bulk quote <ArrowUpRight size={16} />
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="wholesale-cta">
+            <div>
+              <b>Planning a bulk purchase?</b>
+              <span>
+                Share your required models and quantity. Our team will help
+                with the latest wholesale quotation.
+              </span>
+            </div>
+            <a className="btn btn-dark" href="#contact">
+              Enquire Now <ArrowRight size={17} />
+            </a>
+          </div>
+        </section>
+
+        {/* ================= ABOUT ================= */}
         <section className="about-section section" id="about">
           <div className="about-image">
             <div className="about-image-inner">
@@ -486,25 +585,27 @@ ${message}
             <h2>
               Manufacturing quality.
               <br />
-              <em>Building confidence.</em>
+              <em>Supplying with confidence.</em>
             </h2>
             <p>
               At Shiv Manufacturing, our focus is on delivering dependable
-              cooling products and industrial components that meet practical,
-              everyday requirements. We believe in consistent quality,
-              thoughtful workmanship and building long-term relationships with
-              our customers.
+              cooling products and components that meet practical, everyday
+              requirements. We believe in consistent quality, thoughtful
+              workmanship and building long-term relationships with our
+              customers.
             </p>
             <p>
-              From fan blades and cooler motors to cooler bodies, brackets and
-              pumps, our product range is designed to support manufacturers,
-              dealers and businesses.
+              We manufacture fan blades, cooler motors, bodies and pumps, and
+              we also supply fans and home appliances to retailers, dealers and
+              bulk buyers, so you can source from one trusted place.
             </p>
             <a className="btn btn-dark" href="#contact">
               Connect with us <ArrowRight size={17} />
             </a>
           </div>
         </section>
+
+        {/* ================= WHY US ================= */}
         <section className="why-section" id="why-us">
           <div className="section section-inner">
             <div className="section-heading">
@@ -533,7 +634,10 @@ ${message}
                   <Wrench />
                 </span>
                 <h3>Product Know-how</h3>
-                <p>A practical range of components for cooling applications.</p>
+                <p>
+                  Hands-on manufacturing experience across cooling components
+                  and appliances.
+                </p>
               </div>
               <div className="benefit">
                 <span>
@@ -552,6 +656,8 @@ ${message}
             </div>
           </div>
         </section>
+
+        {/* ================= CONTACT ================= */}
         <section className="contact-section" id="contact">
           <div className="contact-bg-mark">S</div>
           <div className="contact-inner">
@@ -627,6 +733,7 @@ ${message}
                 <span className="hours-dot" /> {COMPANY.hours}
               </div>
             </div>
+
             <form className="contact-form" onSubmit={handleSubmit}>
               <div className="form-heading">
                 <div>
@@ -675,6 +782,10 @@ ${message}
                     onChange={(e) => setSelected(e.target.value)}
                   >
                     <option value="">Select a product</option>
+                    {selected &&
+                      !products.some(
+                        (p) => `${p.name} (${p.code})` === selected
+                      ) && <option value={selected}>{selected}</option>}
                     {groupedProducts.map(([c, list]) => (
                       <optgroup key={c} label={c}>
                         {list.map((p) => (
@@ -718,12 +829,6 @@ ${message}
                   {error}
                 </p>
               )}
-              {sent && (
-                <p className="form-hint">
-                  Your email app should open with your enquiry. If it doesn't,
-                  email us directly.
-                </p>
-              )}
               <p className="privacy-note">
                 Your details will only be used to respond to your enquiry.
               </p>
@@ -731,17 +836,20 @@ ${message}
           </div>
         </section>
       </main>
+
+      {/* ================= FOOTER ================= */}
       <footer className="footer">
         <div className="footer-main">
           <Logo />
           <p>
-            Cooling components and industrial products
+            Manufacturing and supplying fans, coolers and home appliances
             <br />
             with quality at the centre.
           </p>
           <div className="footer-links">
             <a href="#home">Home</a>
             <a href="#products">Products</a>
+            <a href="#wholesale">Wholesale</a>
             <a href="#about">About Us</a>
             <a href="#contact">Contact</a>
           </div>
@@ -757,6 +865,7 @@ ${message}
           <span>Designed for quality. Built for trust.</span>
         </div>
       </footer>
+
       <a
         className="floating-call"
         href={`tel:${COMPANY.phoneLink}`}
