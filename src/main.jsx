@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import emailjs from "@emailjs/browser";
+import LegalModal from "./components/LegalModal"
 import {
   ArrowRight,
   ArrowUpRight,
@@ -126,6 +127,8 @@ function App() {
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [legalModal, setLegalModal] = useState(null); // "privacy" | "terms" | null
+
   const filtered = useMemo(() => {
     const q = normalizeSearchText(search);
 
@@ -411,7 +414,15 @@ ${message}
                   <span className="product-number">{p.code}</span>
                   <span className="product-category">{p.category}</span>
                 </div>
-                <ProductArt src={p.image} name={p.name} category={p.category} />
+                {/* <ProductArt src={p.image} name={p.name} category={p.category} /> */}
+                <div className="product-image-wrap">
+  <img
+    src={p.image}
+    alt={p.name}
+    className="product-image"
+    loading="lazy"
+  />
+</div>
                 <div className="product-info">
                   <h3>{p.name}</h3>
                   <p>{p.description}</p>
@@ -857,13 +868,21 @@ ${message}
             Back to top ↑
           </a>
         </div>
-        <div className="footer-bottom">
-          <span>
-            © {new Date().getFullYear()} Shiv Manufacturing. All rights
-            reserved.
-          </span>
-          <span>Designed for quality. Built for trust.</span>
-        </div>
+       <div className="footer-bottom">
+  <span>
+    © {new Date().getFullYear()} Shiv Manufacturing. All rights
+    reserved.
+  </span>
+  <span className="footer-legal">
+  <button type="button" onClick={() => setLegalModal("privacy")}>
+    Privacy Policy
+  </button>
+  <button type="button" onClick={() => setLegalModal("terms")}>
+    Terms &amp; Conditions
+  </button>
+</span>
+  <span>Designed for quality. Built for trust.</span>
+</div>
       </footer>
 
       <a
@@ -873,6 +892,9 @@ ${message}
       >
         <Phone size={20} />
       </a>
+      {legalModal && (
+  <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />
+)}
     </>
   );
 }
